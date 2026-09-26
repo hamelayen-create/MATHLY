@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mathsly — Révisions de maths</title>
+<meta name="theme-color" content="#1e3a8a">
+<style>
+:root{
+  --bg:#f4f6fb; --card:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0;
+  --brand:#1e3a8a; --brand2:#3b5bdb; --accent:#0ea5e9;
+  --ok:#15803d; --okbg:#dcfce7; --no:#b91c1c; --nobg:#fee2e2; --amber:#b45309; --amberbg:#fef3c7;
+  --radius:16px; --shadow:0 1px 2px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;
+  background:var(--bg); color:var(--ink); line-height:1.55; -webkit-text-size-adjust:100%;
+}
+h1,h2,h3{line-height:1.25;margin:0}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+a{color:var(--brand2)}
+
+/* ---------- Layout ---------- */
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 96px}
+header.top{background:linear-gradient(135deg,#1e3a8a,#3b5bdb 60%,#0ea5e9);
+  color:#fff;padding:20px 0 22px}
+header.top .wrap{padding-bottom:0;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.01em}
+.logo .mark{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.18);
+  display:grid;place-items:center;font-size:18px;border:1px solid rgba(255,255,255,.28)}
+.top .spacer{flex:1}
+.pill{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
+  padding:6px 12px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap}
+.hero{padding:22px 0 2px;color:#fff}
+.hero p{margin:8px 0 0;opacity:.92;max-width:620px}
+
+/* ---------- Barre des niveaux ---------- */
+nav.niveaux{background:var(--brand);border-bottom:1px solid rgba(255,255,255,.15)}
+nav.niveaux .wrap{display:flex;gap:4px;padding-top:0;padding-bottom:0;overflow-x:auto;
+  scrollbar-width:none}
+nav.niveaux .wrap::-webkit-scrollbar{display:none}
+.niv{padding:12px 16px;font-weight:700;font-size:14.5px;color:rgba(255,255,255,.72);
+  border-bottom:3px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:7px;
+  transition:color .15s}
+.niv:hover{color:#fff}
+.niv.on{color:#fff;border-bottom-color:var(--accent);background:rgba(255,255,255,.08)}
+.niv .badge{font-size:11px;font-weight:800;padding:1px 7px;border-radius:999px;
+  background:rgba(255,255,255,.2);color:#fff}
+
+/* ---------- Sous-onglets (Cours / QCM / Progression) ---------- */
+nav.sous{position:sticky;top:0;z-index:20;background:rgba(244,246,251,.94);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.sous .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:0;overflow-x:auto}
+nav.sous .wrap::-webkit-scrollbar{display:none}
+.tab{padding:10px 16px;border-radius:12px 12px 0 0;font-weight:600;color:var(--muted);
+  border-bottom:3px solid transparent;white-space:nowrap}
+.tab.on{color:var(--brand);border-bottom-color:var(--brand);background:var(--card)}
+
+/* ---------- Cards ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:20px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:14px}
+@media(min-width:720px){
+  .grid.cols2{grid-template-columns:repeat(2,1fr)}
+  .grid.cols3{grid-template-columns:repeat(3,1fr)}
+}
+.sect{margin-top:24px}
+.sect>h2{font-size:20px;margin-bottom:4px}
+.sect .sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+.themes{background:#eef2f9;border:1px solid var(--line);border-radius:12px;padding:10px 14px;
+  font-size:13.5px;color:var(--brand);margin:0 0 14px}
+.themes b{color:var(--ink)}
+
+/* ---------- Cartes cliquables ---------- */
+.lvl{cursor:pointer;transition:transform .12s ease,box-shadow .12s ease;text-align:left;
+  border:1px solid var(--line);background:var(--card);border-radius:var(--radius);padding:18px;
+  box-shadow:var(--shadow);display:block;width:100%}
+.lvl:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(15,23,42,.12)}
+.lvl .icon{font-size:26px}
+.lvl h3{font-size:17px;margin:8px 0 4px}
+.lvl p{margin:0;color:var(--muted);font-size:14px}
+.bar{height:8px;border-radius:99px;background:#e8edf6;overflow:hidden;margin-top:12px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--brand2),var(--accent));width:0;transition:width .4s}
+
+/* ---------- Boutons ---------- */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;
+  font-weight:700;font-size:15px;transition:filter .15s,transform .1s;text-decoration:none}
+.btn.primary{background:var(--brand2);color:#fff}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:#eef2f9;color:var(--brand);border:1px solid var(--line)}
+.btn.ghost:hover{background:#e4eaf6}
+.btn:active{transform:scale(.985)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* ---------- Cours ---------- */
+.chip{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;
+  background:#eef2f9;color:var(--brand);border:1px solid var(--line)}
+.chip.ok{background:var(--okbg);color:var(--ok);border-color:#bbf7d0}
+.chip.no{background:var(--nobg);color:var(--no);border-color:#fecaca}
+.cours{font-size:15.5px}
+.cours h3{margin:22px 0 8px;font-size:17px}
+.cours h3:first-child{margin-top:0}
+.cours ul{margin:8px 0;padding-left:22px}
+.cours li{margin:4px 0}
+.box{background:#f7f9fd;border:1px solid var(--line);border-left:4px solid var(--accent);
+  border-radius:12px;padding:14px 16px;margin:14px 0}
+.box b{color:var(--brand)}
+.box.warn{background:var(--amberbg);border-left-color:var(--amber);border-color:#fde68a}
+.formula{background:#0f172a;color:#e2e8f0;border-radius:12px;padding:12px 16px;margin:10px 0;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14.5px;overflow-x:auto;white-space:pre-wrap}
+
+/* ---------- QCM ---------- */
+.qtop{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.qtop .prog{font-size:13px;color:var(--muted);font-weight:600}
+.qtext{font-size:17px;font-weight:600;margin:14px 0 16px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;padding:13px 15px;border:1.5px solid var(--line);
+  border-radius:12px;background:#fff;text-align:left;font-size:15.5px;transition:.12s}
+.opt:hover:not([disabled]){border-color:var(--brand2);background:#f7f9ff}
+.opt .letter{width:28px;height:28px;flex:0 0 28px;border-radius:8px;background:#eef2f9;color:var(--brand);
+  display:grid;place-items:center;font-weight:800;font-size:14px}
+.opt[disabled]{cursor:default}
+.opt.good{border-color:#16a34a;background:var(--okbg)}
+.opt.good .letter{background:#16a34a;color:#fff}
+.opt.bad{border-color:#dc2626;background:var(--nobg)}
+.opt.bad .letter{background:#dc2626;color:#fff}
+.feedback{margin-top:14px;padding:14px 16px;border-radius:12px;font-size:14.5px;display:none}
+.feedback.show{display:block}
+.feedback.good{background:var(--okbg);border:1px solid #bbf7d0;color:#14532d}
+.feedback.bad{background:var(--nobg);border:1px solid #fecaca;color:#7f1d1d}
+.feedback b{display:block;margin-bottom:4px}
+
+/* ---------- Résultats ---------- */
+.score{font-size:46px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.score small{font-size:18px;color:var(--muted);font-weight:600}
+.recap{display:grid;gap:8px;margin-top:16px}
+.recap .line{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:10px;background:#f7f9fd;
+  border:1px solid var(--line);font-size:14px}
+.recap .line .n{width:22px;height:22px;flex:0 0 22px;border-radius:6px;display:grid;place-items:center;
+  font-size:12px;font-weight:800;background:#e2e8f0;color:var(--ink)}
+
+/* ---------- Divers ---------- */
+.empty{text-align:center;color:var(--muted);padding:34px 16px}
+.kv{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:9px 0;
+  border-bottom:1px dashed var(--line);font-size:14.5px}
+.kv:last-child{border-bottom:0}
+footer{color:var(--muted);font-size:13px;text-align:center;padding:30px 16px 10px}
+@media print{nav.niveaux,nav.sous,header.top{display:none}.wrap{padding-bottom:0}}
+
+/* ---------- Mode classe ---------- */
+.classe-badge{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-weight:800;
+  padding:5px 12px;border-radius:999px;font-size:12.5px;display:inline-flex;align-items:center;gap:6px}
+.code-salle{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:34px;font-weight:800;
+  letter-spacing:.22em;background:#0f172a;color:#a5f3fc;border-radius:14px;padding:16px 22px;
+  text-align:center;user-select:all}
+.indice{background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;
+  border-radius:12px;padding:12px 15px;font-size:14.5px;color:#78350f}
+.indice b{display:block;margin-bottom:3px;color:#92400e}
+.saisie-rep{width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:12px;
+  font-size:17px;font-family:inherit;background:#fff;color:var(--ink);transition:border-color .15s}
+.saisie-rep:focus{outline:none;border-color:var(--brand2);background:#f9fbff}
+.saisie-code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:32px;font-weight:800;
+  letter-spacing:.2em;text-align:center;text-transform:uppercase;width:100%;padding:16px;
+  border:2px solid var(--line);border-radius:14px;background:#fff;color:var(--ink)}
+.saisie-code:focus{outline:none;border-color:var(--brand2)}
+.jauge{display:grid;grid-template-columns:1fr 62px;gap:12px;align-items:center;margin:12px 0}
+.jauge .piste{height:30px;border-radius:8px;background:#e8edf6;overflow:hidden}
+.jauge .piste>i{display:block;height:100%;border-radius:8px;transition:width .5s ease}
+.jauge .val{font-weight:800;font-size:19px;text-align:right}
+.qclasse{font-size:23px;font-weight:700;margin:18px 0 20px;line-height:1.35}
+.opt-classe{display:grid;grid-template-columns:44px 1fr 62px;gap:12px;align-items:center;
+  padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;margin-bottom:10px}
+.opt-classe .lettre{width:32px;height:32px;border-radius:9px;background:#eef2f9;color:var(--brand);
+  display:grid;place-items:center;font-weight:800}
+.opt-classe.bonne{border-color:#16a34a;background:var(--okbg)}
+.opt-classe.bonne .lettre{background:#16a34a;color:#fff}
+.opt-classe .pct{font-weight:800;font-size:17px;text-align:right}
+.pastille{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:7px;
+  font-size:12.5px;font-weight:800;color:#fff}
+.direct{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--ok)}
+.direct .dot{width:9px;height:9px;border-radius:50%;background:var(--ok);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.attente{background:#f7f9fd;border:1px dashed var(--line);border-radius:12px;padding:22px;text-align:center;
+  color:var(--muted)}
+.grille-rep{display:flex;flex-wrap:wrap;gap:8px}
+
+/* ---------- Mode classe ---------- */
+.classe-badge{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-weight:800;
+  padding:5px 12px;border-radius:999px;font-size:12.5px;display:inline-flex;align-items:center;gap:6px}
+.code-salle{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:34px;font-weight:800;
+  letter-spacing:.22em;background:#0f172a;color:#a5f3fc;border-radius:14px;padding:16px 22px;
+  text-align:center;user-select:all}
+.saisie-code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:32px;font-weight:800;
+  letter-spacing:.2em;text-align:center;text-transform:uppercase;width:100%;padding:16px;
+  border:2px solid var(--line);border-radius:14px;background:#fff;color:var(--ink)}
+.saisie-code:focus{outline:none;border-color:var(--brand2)}
+.jauge{display:grid;grid-template-columns:1fr 62px;gap:12px;align-items:center;margin:12px 0}
+.jauge .piste{height:30px;border-radius:8px;background:#e8edf6;overflow:hidden}
+.jauge .piste>i{display:block;height:100%;border-radius:8px;transition:width .5s ease}
+.jauge .val{font-weight:800;font-size:19px;text-align:right}
+.qclasse{font-size:23px;font-weight:700;margin:18px 0 20px;line-height:1.35}
+.opt-classe{display:grid;grid-template-columns:44px 1fr 62px;gap:12px;align-items:center;
+  padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;margin-bottom:10px}
+.opt-classe .lettre{width:32px;height:32px;border-radius:9px;background:#eef2f9;color:var(--brand);
+  display:grid;place-items:center;font-weight:800}
+.opt-classe.bonne{border-color:#16a34a;background:var(--okbg)}
+.opt-classe.bonne .lettre{background:#16a34a;color:#fff}
+.opt-classe .pct{font-weight:800;font-size:17px;text-align:right}
+.pastille{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:7px;
+  font-size:12.5px;font-weight:800;color:#fff}
+.direct{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--ok)}
+.direct .dot{width:9px;height:9px;border-radius:50%;background:var(--ok);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.attente{background:#f7f9fd;border:1px dashed var(--line);border-radius:12px;padding:22px;text-align:center;
+  color:var(--muted)}
+.grille-rep{display:flex;flex-wrap:wrap;gap:8px}
+
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="logo"><span class="mark">∑</span> Mathsly</div>
+    <div class="spacer"></div>
+    <span class="pill" id="userPill">Élève</span>
+  </div>
+  <div class="wrap hero">
+    <h1 style="font-size:25px">Réviser les maths, niveau par niveau</h1>
+    <p>Cours structurés et QCM corrigés de la 6e à la Terminale, sur le programme officiel. Mode classe pour interroger les élèves en direct.</p>
+  </div>
+</header>
+
+<nav class="niveaux"><div class="wrap" id="barNiveaux"></div></nav>
+<nav class="sous"><div class="wrap" id="barSous"></div></nav>
+
+<main class="wrap" id="app"></main>
+
+<footer>Mathsly · ta progression reste sur cet appareil · aucune donnée personnelle collectée</footer>
+
+<script>
+const NIVEAUX = [
+  { id:"6e",  nom:"6e",  emoji:"🎒", desc:"Cycle 3 · consolider les bases",
+    themes:"Nombres entiers et décimaux · Fractions · Proportionnalité · Géométrie plane · Espace · Données" },
+  { id:"5e",  nom:"5e",  emoji:"📗", desc:"Cycle 4 · entrée dans l'algèbre",
+    themes:"Nombres relatifs · Fractions · Puissances · Calcul littéral · Triangles · Parallélogrammes · Statistiques" },
+  { id:"4e",  nom:"4e",  emoji:"📘", desc:"Cycle 4 · calcul littéral et théorèmes",
+    themes:"Puissances · Racine carrée · Calcul littéral · Pythagore · Thalès · Cosinus · Probabilités" },
+  { id:"3e",  nom:"3e",  emoji:"📙", desc:"Cycle 4 · préparation au lycée",
+    themes:"Arithmétique · Équations et inéquations · Fonctions · Trigonométrie · Vecteurs · Statistiques" },
+  { id:"2de", nom:"2de", emoji:"📄", desc:"Lycée · tronc commun",
+    themes:"Nombres réels · Arithmétique · Équations · Vecteurs · Droites du plan · Fonctions · Statistiques · Probabilités" },
+  { id:"1re", nom:"1re", emoji:"📊", desc:"Lycée · spécialité maths",
+    themes:"Suites · Second degré · Dérivation · Exponentielle · Produit scalaire · Probabilités conditionnelles" },
+  { id:"Tle", nom:"Tle", emoji:"🎓", desc:"Lycée · spécialité maths",
+    themes:"Suites et limites · Continuité · Logarithme · Convexité · Espace · Combinatoire · Intégration" }
+];
+
+
+/* =========================================================
+   CONTENU — chargé à la demande selon le niveau choisi.
+   Le détail vit dans MATHSLY_<niveau>.js, à côté de ce fichier.
+   ========================================================= */
+let CHAPITRES = [];
+let QCM = [];
+let CONTENU_CHARGE = {};   // { niveau: true } une fois le fichier lu
+
+/* ---- Chargement du contenu d'un niveau ---- */
+function chargerNiveau(niveau, callback){
+  if(CONTENU_CHARGE[niveau]){ if(callback) callback(); return; }
+
+  // On marque tout de suite pour éviter un double chargement si on reclique vite
+  CONTENU_CHARGE[niveau] = true;
+
+  // Chemin ABSOLU : on construit l'adresse depuis l'emplacement de la page.
+  // Cela fonctionne que l'URL finisse par /MATHLY ou /MATHLY/ , et aussi
+  // en local (file://) quand tous les fichiers sont dans le même dossier.
+  const base = (function(){
+    try {
+      const u = new URL(".", document.baseURI).href;
+      return u;
+    } catch(e) { return ""; }
+  })();
+  const fichier = base + "MATHSLY_" + niveau + ".js";
+  const s = document.createElement("script");
+  s.src = fichier;
+
+  s.onload = function(){
+    relierContenu(niveau);
+    if(callback) callback();
+  };
+
+  s.onerror = function(){
+    // Le fichier n'existe pas encore pour ce niveau : ce n'est pas une erreur bloquante.
+    console.error("Contenu introuvable : " + fichier);
+    window.MATHSLY_ERREUR_CHARGEMENT = fichier;
+    try {
+      const b = document.getElementById("barNiveaux");
+      if (b && !document.getElementById("msgErr")) {
+        const d = document.createElement("div");
+        d.id = "msgErr";
+        d.style.cssText = "margin:12px;padding:12px;border-radius:10px;background:#7f1d1d;color:#fff;font:14px system-ui;line-height:1.5";
+        d.textContent = "Le contenu n'a pas pu être chargé. Fichier demandé : " + fichier;
+        b.parentNode.insertBefore(d, b.nextSibling);
+      }
+    } catch(e) {}
+    if(callback) callback();
+  };
+
+  document.body.appendChild(s);
+}
+
+/* Relie le contenu du fichier chargé aux variables CHAPITRES et QCM du lecteur.
+   Chaque fichier de niveau expose window.MATHSLY_<niveau> = { chapitres, qcm }. */
+function relierContenu(niveau){
+  const paquet = window["MATHSLY_" + niveau.toUpperCase()] || window["MATHSLY_" + niveau];
+  if(!paquet) return;
+
+  const nouveauxChaps = paquet.chapitres || [];
+  const nouveauxQcm   = paquet.qcm || [];
+
+  // On retire d'abord une éventuelle version précédente de ce niveau
+  CHAPITRES = CHAPITRES.filter(c => c.niveau !== niveau).concat(nouveauxChaps);
+  QCM      = QCM.filter(q => q.niveau !== niveau).concat(nouveauxQcm);
+}
+/* =========================================================
+   STOCKAGE — progression sur l'appareil (pas de serveur)
+   ========================================================= */
+const LS="mathsly.v3";
+function load(){ try{ return JSON.parse(localStorage.getItem(LS))||{}; }catch(e){ return {}; } }
+function save(d){ try{ localStorage.setItem(LS, JSON.stringify(d)); }catch(e){} }
+let STATE = load();
+STATE.notes = STATE.notes || {};      // { qcmId: { best, last, attempts } }
+STATE.vus  = STATE.vus  || {};        // { chapId: true }
+
+/* =========================================================
+   OUTILS
+   ========================================================= */
+const app = document.getElementById("app");
+let vue = { name:"niveau", niv:"Tle", onglet:"cours", chap:null, qcm:null, lecon:null };
+let quiz = null;
+
+function chapDeNiv(n){ return CHAPITRES.filter(c=>c.niveau===n); }
+function qcmDeNiv(n){ return QCM.filter(q=>q.niveau===n); }
+function nomNiveau(n){ const x = NIVEAUX.find(v=>v.id===n); return x ? x.nom : n; }
+
+/* ---- Barre des niveaux ---- */
+function renderNiveaux(){
+  document.getElementById("barNiveaux").innerHTML = NIVEAUX.map(n=>{
+    const nb = chapDeNiv(n.id).length + qcmDeNiv(n.id).length;
+    return `<button class="niv ${n.id===vue.niv?"on":""}" onclick="changerNiveau('${n.id}')">
+      <span>${n.emoji}</span><span>${n.nom}</span>
+      <span class="badge" title="${nb} contenu(s)">${nb}</span>
+    </button>`;
+  }).join("");
+}
+
+/* ---- Sous-onglets ---- */
+function renderSous(){
+  const onglets = [
+    { id:"cours", nom:"📘 Cours" },
+    { id:"qcm",   nom:"✅ QCM" },
+    { id:"progres", nom:"📈 Progression" },
+    { id:"class-join", nom:"🎓 Rejoindre une classe" }
+  ];
+  document.getElementById("barSous").innerHTML = onglets.map(o=>
+    `<button class="tab ${o.id===vue.onglet?"on":""}" onclick="changerOnglet('${o.id}')">${o.nom}</button>`
+  ).join("");
+}
+
+function changerNiveau(id){
+  vue.niv = id;
+  vue.chap = null; vue.qcm = null;
+  if(vue.onglet==="chap" || vue.onglet==="quiz") vue.onglet = "cours";
+  render(); window.scrollTo({top:0, behavior:"smooth"});
+}
+function changerOnglet(o){
+  vue.onglet = o; vue.chap = null; vue.qcm = null;
+  render(); window.scrollTo({top:0, behavior:"smooth"});
+}
+function ouvrirChapitre(id){ vue.onglet="chap"; vue.chap=id; vue.lecon=null; render(); window.scrollTo({top:0,behavior:"smooth"}); }
+function ouvrirQCM(id){ vue.onglet="quiz"; vue.qcm=id;
+  const q = QCM.find(x=>x.id===id);
+  quiz = { idx:0, repondu:false, score:0, histo:[], data:q };
+  render(); window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* =========================================================
+   VUES
+   ========================================================= */
+
+
+/* ---- Cours du niveau ---- */
+function vueCours(){
+  const n = vue.niv;
+  const liste = chapDeNiv(n);
+  const lus = liste.filter(c=>STATE.vus[c.id]).length;
+  const pct = liste.length ? Math.round(lus/liste.length*100) : 0;
+  const niv = NIVEAUX.find(x=>x.id===n);
+
+  if(!liste.length){
+    app.innerHTML = `<section class="sect">
+      <h2>Cours · ${niv.nom}</h2>
+      <p class="sub">Les chapitres de ce niveau arrivent bientôt.</p>
+      <div class="card"><div class="empty">Aucun cours n'est encore disponible pour ${niv.nom}.<br>Demande-nous de les ajouter, c'est rapide.</div></div>
+    </section>`;
+    return;
+  }
+
+  app.innerHTML = `
+    <section class="sect">
+      <h2>Cours · ${niv.nom}</h2>
+      <p class="sub">${niv.desc} · ${liste.length} chapitre${liste.length>1?"s":""} · un exemple entièrement résolu à la fin de chacun.</p>
+      <div class="themes"><b>Programme officiel :</b> ${niv.themes}</div>
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <span class="chip ${pct===100?"ok":""}">${lus}/${liste.length} chapitre${liste.length>1?"s":""} consulté${lus>1?"s":""} — ${pct}%</span>
+        </div>
+        <div class="bar" style="margin-top:12px"><i style="width:${pct}%"></i></div>
+      </div>
+    </section>
+    <section class="sect">
+      <div class="grid cols2">
+        ${liste.map(c=>`
+          <button class="lvl" onclick="ouvrirChapitre('${c.id}')">
+            <span class="chip ${STATE.vus[c.id]?"ok":""}">${STATE.vus[c.id]?"Consulté":"À lire"}</span>
+            <h3>${c.titre}</h3>
+            <p>${c.resume}</p>
+            <div class="row" style="margin-top:10px"><span class="chip">⏱ ${c.temps}</span></div>
+          </button>`).join("")}
+      </div>
+    </section>`;
+}
+
+/* ---- Un chapitre : leçons + exercices ---- */
+function vueChapitre(){
+  const c = CHAPITRES.find(x=>x.id===vue.chap);
+  if(!c){ vueCours(); return; }
+  STATE.vus[c.id] = true; save(STATE);
+
+  const lecons = c.lecons || [];
+  const exos = c.exercices || [];
+  const qcmLie = QCM.find(q => q.titre===c.titre);
+  const memeNiv = chapDeNiv(c.niveau);
+  const i = memeNiv.findIndex(x=>x.id===c.id);
+  const prec = i>0 ? memeNiv[i-1] : null;
+  const suiv = i>=0 && i<memeNiv.length-1 ? memeNiv[i+1] : null;
+
+  const numLecon = vue.lecon;
+  const enLecon = (typeof numLecon === "number" && lecons[numLecon]);
+
+  app.innerHTML = `
+    <section class="sect">
+      <div class="row">
+        <button class="btn ghost" onclick="changerOnglet('cours')">‹ Cours ${nomNiveau(c.niveau)}</button>
+        <span class="chip">${nomNiveau(c.niveau)}</span>
+        <span class="chip">⏱ ${c.temps}</span>
+        ${lecons.length ? `<span class="chip">${lecons.length} leçons</span>` : ""}
+        ${exos.length ? `<span class="chip">${exos.length} exercices</span>` : ""}
+      </div>
+      <h2 style="margin-top:16px;font-size:24px">${c.titre}</h2>
+      <p class="sub">${c.resume}</p>
+
+      ${c.cours ? `<div class="card cours">${c.cours}</div>` : ""}
+
+      ${enLecon ? `
+        <div class="card" style="margin-top:18px">
+          <div class="row" style="justify-content:space-between;align-items:center">
+            <span class="chip">Leçon ${numLecon+1} / ${lecons.length}</span>
+            <button class="btn ghost" onclick="fermerLecon()">Fermer la leçon</button>
+          </div>
+          <h3 style="font-size:19px;margin:14px 0 4px">${lecons[numLecon].titre}</h3>
+          <div class="cours" style="margin-top:14px">${lecons[numLecon].contenu}</div>
+          <div class="row" style="margin-top:20px">
+            ${numLecon > 0 ? `<button class="btn ghost" onclick="ouvrirLecon(${numLecon-1})">‹ Leçon précédente</button>` : ""}
+            ${numLecon < lecons.length-1 ? `<button class="btn primary" onclick="ouvrirLecon(${numLecon+1})">Leçon suivante ›</button>` : `<button class="btn primary" onclick="fermerLecon()">Terminer les leçons</button>`}
+          </div>
+        </div>
+      ` : `
+
+        ${lecons.length ? `<div class="card" style="margin-top:18px">
+          <h3 style="font-size:17px">Les leçons du chapitre</h3>
+          <p style="color:var(--muted);font-size:14px;margin:6px 0 14px">Lis-les dans l'ordre : chacune s'appuie sur la précédente.</p>
+          ${lecons.map((l,n)=>`
+            <button class="lvl" style="margin-bottom:10px;box-shadow:none" onclick="ouvrirLecon(${n})">
+              <span class="chip">Leçon ${n+1}</span>
+              <h3>${l.titre}</h3>
+              <p>Clique pour ouvrir la leçon</p>
+            </button>`).join("")}
+        </div>` : ""}
+
+        ${exos.length ? `<div class="card" style="margin-top:18px">
+          <div class="row" style="justify-content:space-between;align-items:flex-end">
+            <div>
+              <h3 style="font-size:17px">S'entraîner</h3>
+              <p style="color:var(--muted);font-size:14px;margin:6px 0 0">${exos.length} exercices corrigés, du plus simple au plus difficile.</p>
+            </div>
+            <button class="btn primary" onclick="ouvrirExercices(1)">Commencer (niveau 1)</button>
+          </div>
+          <div class="row" style="margin-top:14px">
+            <button class="btn ghost" onclick="ouvrirExercices(1)">Facile — ${exos.filter(e=>e.d===1).length}</button>
+            <button class="btn ghost" onclick="ouvrirExercices(2)">Moyen — ${exos.filter(e=>e.d===2).length}</button>
+            <button class="btn ghost" onclick="ouvrirExercices(3)">Difficile — ${exos.filter(e=>e.d===3).length}</button>
+          </div>
+        </div>` : ""}
+
+        ${qcmLie ? `<div class="card" style="margin-top:18px">
+          <h3 style="font-size:17px">Teste-toi sur ce chapitre</h3>
+          <p style="color:var(--muted);margin:6px 0 14px;font-size:14px">${qcmLie.questions.length} questions corrigées et expliquées.</p>
+          <button class="btn primary" onclick="ouvrirQCM('${qcmLie.id}')">Lancer le QCM</button>
+        </div>` : ""}
+      `}
+
+      <div class="row" style="margin-top:18px">
+        ${prec ? `<button class="btn ghost" onclick="ouvrirChapitre('${prec.id}')">‹ ${prec.titre}</button>` : ""}
+        ${suiv ? `<button class="btn ghost" onclick="ouvrirChapitre('${suiv.id}')">${suiv.titre} ›</button>` : ""}
+      </div>
+    </section>`;
+}
+
+/* ---- Navigation dans les leçons ---- */
+function ouvrirLecon(n){ vue.lecon = n; render(); window.scrollTo({top:0,behavior:"smooth"}); }
+function fermerLecon(){ vue.lecon = null; render(); window.scrollTo({top:0,behavior:"smooth"}); }
+
+/* ---- Exercices ---- */
+function ouvrirExercices(niveau){
+  const c = CHAPITRES.find(x=>x.id===vue.chap);
+  if(!c || !c.exercices) return;
+  const liste = c.exercices.filter(e => e.d === niveau);
+  if(!liste.length){ alert("Aucun exercice de ce niveau pour ce chapitre."); return; }
+  EXO = { liste, idx:0, difficulte:niveau, montre:false, juste:null, saisie:null, indicesVus:[], faits:[] };
+  vue.onglet = "exo";
+  render(); window.scrollTo({top:0,behavior:"smooth"});
+}
+
+let EXO = null;
+
+
+/* =========================================================
+   INDICES PROGRESSIFS
+   Générés automatiquement à partir de l'exercice, sans modifier
+   les fichiers de contenu. Trois niveaux : piste → méthode → réponse déguisée.
+   ========================================================= */
+
+/* Détecte le thème de l'exercice à partir de son énoncé et de sa correction. */
+function themeExercice(e){
+  const t = (e.e + " " + e.r + " " + e.c).toLowerCase();
+
+  if(/dériv|f′|f'\(|dérivée/.test(t))                    return "derivee";
+  if(/primitive|intégrale|∫/.test(t))                    return "primitive";
+  if(/limite|lim /.test(t))                              return "limite";
+  if(/discriminant|Δ|racine|second degré|trinôme/.test(t)) return "secondDegre";
+  if(/pythagore|hypoténuse/.test(t))                     return "pythagore";
+  if(/thales|thalès|parallèles/.test(t))                 return "thales";
+  if(/cosinus|cos\(|sin\(|tangente|angle|trigo/.test(t)) return "trigo";
+  if(/probabilit|P\(A|événement|hasard|dé équilibré/.test(t)) return "proba";
+  if(/espérance|E\(X|variance|écart type/.test(t))       return "esperance";
+  if(/vecteur|colinéaire|AB⃗|aligné/.test(t))             return "vecteur";
+  if(/fraction|numérateur|dénominateur|simplifi/.test(t)) return "fraction";
+  if(/puissance|exposant|10ⁿ|10\^/.test(t))               return "puissance";
+  if(/racine carrée|√/.test(t))                          return "racine";
+  if(/pourcentage|%|proportion|taux/.test(t))            return "pourcentage";
+  if(/moyenne|médiane|quartile|statistique/.test(t))     return "statistique";
+  if(/suite|uₙ|arithmétique|géométrique/.test(t))        return "suite";
+  if(/combin|C\(n|arrangement|factorielle|anagramme/.test(t)) return "combinatoire";
+  if(/logarithme|ln /.test(t))                           return "logarithme";
+  if(/exponentielle|eˣ|exp/.test(t))                     return "exponentielle";
+  if(/équation|résoudre|x =/.test(t))                    return "equation";
+  if(/aire|périmètre|volume/.test(t))                    return "geometrie";
+  return "general";
+}
+
+/* Extrait la forme de la réponse attendue, pour orienter l'indice. */
+function formeReponse(r){
+  const s = String(r);
+  if(/^démonstration|^explication/i.test(s))        return "redaction";
+  if(/^[a-z]\(x\)\s*=|^f′\(x\)/.test(s))            return "expression";
+  if(/^x\s*=|^[a-z]\s*=/.test(s))                   return "valeurVariable";
+  if(/^-?\d+\/\d+/.test(s))                         return "fraction";
+  if(/^-?\d+([.,]\d+)?$/.test(s.trim()))            return "nombre";
+  if(/√/.test(s))                                   return "radical";
+  if(/ou/.test(s))                                  return "multiples";
+  return "texte";
+}
+
+/* Construit jusqu'à trois indices pour un exercice. */
+function indicesExercice(e){
+  const theme = themeExercice(e);
+  const forme = formeReponse(e.r);
+  const out = [];
+
+  // ----- Indice 1 : piste de thème, indépendante de la réponse -----
+  const pistes = {
+    derivee:       "Pense aux formules de dérivation : produit, quotient ou composée. Laquelle s'applique ici ?",
+    primitive:     "Cherche la forme u′·g(u) dans l'expression. Repère ce qui joue le rôle de u.",
+    limite:        "Vérifie d'abord s'il y a une forme indéterminée (∞ − ∞, 0 × ∞, ∞/∞, 0/0). Si oui, factorise.",
+    secondDegre:   "Identifie a, b et c, puis calcule le discriminant Δ = b² − 4ac.",
+    pythagore:     "Repère l'angle droit et donc l'hypoténuse. Écris l'égalité de Pythagore avant de calculer.",
+    thales:        "Vérifie qu'il y a bien deux droites parallèles, puis écris les rapports en respectant l'ordre des points.",
+    trigo:         "Identifie le côté adjacent, le côté opposé et l'hypoténuse par rapport à l'angle concerné.",
+    proba:         "Compte d'abord toutes les issues possibles, puis celles qui réalisent l'événement.",
+    esperance:     "Calcule d'abord E(X) en pondérant chaque valeur par sa probabilité.",
+    vecteur:       "Écris les coordonnées des vecteurs concernés, puis applique le test de colinéarité.",
+    fraction:      "Mets au même dénominateur, puis additionne les numérateurs. Simplifie à la fin.",
+    puissance:     "Utilise les règles : on additionne les exposants dans un produit, on les soustrait dans un quotient.",
+    racine:        "Cherche un carré parfait caché dans le nombre sous la racine.",
+    pourcentage:   "Un pourcentage se traduit par un coefficient multiplicateur : +t % donne ×(1 + t/100).",
+    statistique:   " Ordonne la série avant tout calcul de médiane ou de quartile.",
+    suite:         "Détermine d'abord si la suite est arithmétique (on ajoute) ou géométrique (on multiplie).",
+    combinatoire:  "Pose-toi la question : l'ordre compte-t-il ? Si oui, c'est un arrangement ; sinon, une combinaison.",
+    logarithme:    "Utilise les propriétés : ln(ab) = ln a + ln b et ln(a/b) = ln a − ln b.",
+    exponentielle: "Applique la formule (e^u)′ = u′·e^u, en n'oubliant pas le facteur u′.",
+    equation:      "Regroupe les termes en x d'un côté et les nombres de l'autre, puis divise.",
+    geometrie:     "Écris la formule d'aire ou de périmètre, puis remplace par les valeurs données.",
+    general:       "Relis l'énoncé en notant les données et ce qui est demandé. La correction passe souvent par une formule du cours."
+  };
+  out.push(pistes[theme] || pistes.general);
+
+  // ----- Indice 2 : méthode adaptée à la forme de la réponse -----
+  const methodes = {
+    redaction:      "Cet exercice demande une démonstration : commence par écrire l'hypothèse, puis déroule le raisonnement jusqu'à la conclusion.",
+    expression:     "Dérive ou développe terme à terme. La réponse sera une expression en x.",
+    valeurVariable: "La réponse est une ou plusieurs valeurs de l'inconnue. Isole x dans l'équation.",
+    fraction:       "La réponse est une fraction : pense à la simplifier au maximum (fraction irréductible).",
+    nombre:         "La réponse est un nombre : vérifie ton calcul par un ordre de grandeur avant de valider.",
+    radical:        "La réponse contient une racine carrée : cherche à simplifier √(a × b) = √a × √b.",
+    multiples:      "Il y a plusieurs solutions : n'en oublie pas. Pense aux cas symétriques.",
+    texte:          "La réponse est rédigée : regarde la correction pour voir la structure attendue."
+  };
+  out.push(methodes[forme] || "Concentre-toi sur l'étape qui te bloque : écris ce que tu sais, puis ce qui est demandé.");
+
+  // ----- Indice 3 : réponse déguisée (longueur et premier signe) -----
+  const r = String(e.r).trim();
+  if(forme === "nombre" || forme === "fraction" || forme === "radical"){
+    const signe = /^-|−/.test(r) ? "négatif" : "positif";
+    out.push("La réponse est un nombre " + signe + ". Vérifie le signe avant de calculer, c'est là que se glissent les erreurs.");
+  } else if(forme === "expression"){
+    out.push("La réponse est une expression. Écris-la sous la forme la plus simple possible, en factorisant si tu peux.");
+  } else if(forme === "multiples"){
+    out.push("Il y a " + (r.split(/\s+ou\s+/i).length) + " solutions à trouver. Cherche-les toutes.");
+  } else {
+    out.push("La correction détaillée explique la méthode pas à pas. Lis-la en notant chaque étape.");
+  }
+
+  return out;
+}
+
+let INDICES = [];
+
+/* Compare la réponse saisie à la réponse attendue.
+   Tolérant : espace, casse, virgule/point, symboles ×, √, fractions simples. */
+function normaliser(s){
+  return String(s)
+    .toLowerCase()
+    .replace(/\s+/g, "")
+    .replace(/,/g, ".")                    // virgule décimale → point
+    .replace(/[×x·*]/g, "*")
+    .replace(/÷/g, "/")
+    .replace(/√/g, "sqrt")
+    .replace(/π/g, "pi")
+    .replace(/−/g, "-")               // signe moins typographique
+    .replace(/[’']/g, "")
+    .replace(/\.$/, "");                  // point final
+}
+
+/* Découpe la réponse attendue en variantes acceptées.
+   L'énoncé contient souvent « x = 3 ou x = -5 » : on accepte aussi « 3 » seul. */
+function variantesAcceptees(rep){
+  const brut = String(rep).trim();
+  const out = new Set([normaliser(brut)]);
+
+  // Retirer les préfixes du type « x = », « f(x) = », « Δ = »
+  let sansPrefixe = brut.replace(/^[a-zΔf()0-9]+\s*=\s*/i, "");
+  out.add(normaliser(sansPrefixe));
+
+  // Découper sur « ou », « et », « , »
+  brut.split(/\s+ou\s+|\s+et\s+|\s*;\s*/i).forEach(p => {
+    out.add(normaliser(p));
+    out.add(normaliser(p.replace(/^[a-zΔf()0-9]+\s*=\s*/i, "")));
+  });
+
+  // Extraire les nombres et expressions séparés par des virgules
+  sansPrefixe.split(/\s*,\s*/).forEach(p => out.add(normaliser(p)));
+
+  out.delete("");
+  return [...out];
+}
+
+/* Vérifie si la saisie correspond à la réponse attendue. */
+function reponseJuste(saisie, attendue){
+  const s = normaliser(saisie);
+  if(!s) return false;
+  const variantes = variantesAcceptees(attendue);
+  if(variantes.includes(s)) return true;
+
+  // Comparaison numérique : accepte 0.5 pour 1/2, 0,50 pour 0.5
+  const nombreSaisie = Number(s);
+  if(!isNaN(nombreSaisie)){
+    for(const v of variantes){
+      const nv = Number(v);
+      if(!isNaN(nv) && Math.abs(nombreSaisie - nv) < 1e-9) return true;
+    }
+  }
+
+  // Comparaison croisée produit en croix : « 5/6 » accepté pour « 5/6 »
+  const fractionsSaisie = s.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
+  if(fractionsSaisie){
+    const val = Number(fractionsSaisie[1]) / Number(fractionsSaisie[2]);
+    for(const v of variantes){
+      const fv = v.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
+      if(fv){
+        const vval = Number(fv[1]) / Number(fv[2]);
+        if(Math.abs(val - vval) < 1e-9) return true;
+      }
+      const nv = Number(v);
+      if(!isNaN(nv) && Math.abs(val - nv) < 1e-9) return true;
+    }
+  }
+
+  return false;
+}
+
+function vueExercice(){
+  const c = CHAPITRES.find(x=>x.id===vue.chap);
+  if(!EXO || !EXO.liste[EXO.idx]){ vueChapitre(); return; }
+  const e = EXO.liste[EXO.idx];
+  const total = EXO.liste.length;
+
+  // On prépare les indices pour cet exercice (recalculés à chaque changement)
+  if(!EXO.indicesVus) EXO.indicesVus = [];
+  INDICES = indicesExercice(e);
+
+  app.innerHTML = `
+    <section class="sect">
+      <div class="row">
+        <button class="btn ghost" onclick="quitterExercices()">‹ ${c ? c.titre : "Chapitre"}</button>
+        <span class="chip">${c ? nomNiveau(c.niveau) : ""}</span>
+      </div>
+      <h2 style="margin-top:16px;font-size:22px">Exercices — niveau ${EXO.difficulte}</h2>
+      <div class="card" style="margin-top:14px">
+        <div class="qtop">
+          <span class="chip">Exercice ${EXO.idx+1} / ${total}</span>
+          <span class="prog">${EXO.faits.filter(Boolean).length} réussi${EXO.faits.filter(Boolean).length>1?"s":""}</span>
+        </div>
+        <div class="bar" style="margin-top:12px"><i style="width:${Math.round(EXO.idx/total*100)}%"></i></div>
+
+        <div class="qtext">${e.e}</div>
+
+        ${/* --- Zone de saisie, si pas encore vérifié --- */ ""}
+        ${/* --- Zone de travail : indices + saisie --- */ ""}
+        ${!EXO.montre ? `
+
+          ${/* Indices déjà demandés */ ""}
+          ${(EXO.indicesVus || []).map((ind, n) => `
+            <div class="indice" style="margin-top:14px">
+              <b>Indice ${n+1}</b>
+              <div style="margin-top:4px">${ind}</div>
+            </div>
+          `).join("")}
+
+          ${/* Bouton pour demander l'indice suivant */ ""}
+          ${(EXO.indicesVus || []).length < INDICES.length ? `
+            <div class="row" style="margin-top:14px">
+              <button class="btn ghost" onclick="demanderIndice()">
+                💡 ${(EXO.indicesVus || []).length === 0 ? "Donne-moi un indice" : "Encore un indice (" + (EXO.indicesVus.length + 1) + "/" + INDICES.length + ")"}
+              </button>
+            </div>
+          ` : `
+            <div class="box" style="margin-top:14px;font-size:14px">
+              Tu as vu tous les indices. À toi de jouer — ou demande la correction si tu es bloqué.
+            </div>
+          `}
+
+          ${/* Saisie de la réponse */ ""}
+          <div style="margin-top:18px">
+            <label style="font-size:14px;color:var(--muted);display:block;margin-bottom:6px">
+              Ta réponse :
+            </label>
+            <input id="reponse" class="saisie-rep" autocomplete="off" autocapitalize="off"
+              placeholder="Écris ta réponse ici…"
+              onkeydown="if(event.key==='Enter'){ verifierReponse(); }">
+            <div class="row" style="margin-top:14px">
+              <button class="btn primary" onclick="verifierReponse()">Vérifier</button>
+              <button class="btn ghost" onclick="montrerCorrection()">Voir la correction</button>
+            </div>
+          </div>
+        ` : `
+          ${EXO.juste === true ? `
+            <div class="feedback show good" style="margin-top:0">
+              <b>✅ Bonne réponse !</b>
+              Tu avais écrit « ${EXO.saisie} ».
+            </div>
+          ` : EXO.juste === false ? `
+            <div class="feedback show bad" style="margin-top:0">
+              <b>❌ Pas tout à fait</b>
+              Tu avais écrit « ${EXO.saisie} ».
+            </div>
+          ` : `
+            <div class="box" style="margin-top:0">
+              <b>Correction demandée</b>
+              Tu as choisi de voir la réponse directement.
+            </div>
+          `}
+
+          <div class="feedback show good" style="margin-top:14px">
+            <b>Réponse attendue</b>${e.r}
+          </div>
+          <div class="box" style="margin-top:14px">
+            <b>Correction détaillée</b>
+            <div style="white-space:pre-wrap">${e.c}</div>
+          </div>
+        `}
+      </div>
+
+      <div class="row" style="margin-top:18px">
+        ${EXO.idx > 0 ? `<button class="btn ghost" onclick="exoPrecedent()">‹ Précédent</button>` : ""}
+        ${EXO.idx < total-1 ? `<button class="btn primary" onclick="exoSuivant()">Suivant ›</button>` : `<button class="btn primary" onclick="quitterExercices()">Terminer</button>`}
+      </div>
+    </section>`;
+}
+
+/* L'élève demande un indice supplémentaire. */
+function demanderIndice(){
+  const e = EXO.liste[EXO.idx];
+  if(!INDICES.length) INDICES = indicesExercice(e);
+  if(!EXO.indicesVus) EXO.indicesVus = [];
+  if(EXO.indicesVus.length < INDICES.length){
+    EXO.indicesVus.push(INDICES[EXO.indicesVus.length]);
+  }
+  render();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* L'élève clique sur « Vérifier » : on compare sa saisie à la réponse attendue. */
+function verifierReponse(){
+  const champ = document.getElementById("reponse");
+  if(!champ) return;
+  const saisie = (champ.value || "").trim();
+  if(!saisie){
+    champ.focus();
+    champ.style.borderColor = "var(--no)";
+    return;
+  }
+  const e = EXO.liste[EXO.idx];
+  const juste = reponseJuste(saisie, e.r);
+  EXO.saisie = saisie;
+  EXO.juste = juste;
+  EXO.faits[EXO.idx] = juste;
+  EXO.montre = true;
+  render();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* L'élève demande la correction sans répondre. */
+function montrerCorrection(){
+  EXO.saisie = null;
+  EXO.juste = null;
+  EXO.faits[EXO.idx] = false;
+  EXO.montre = true;
+  render();
+}
+function exoSuivant(){ if(EXO.idx < EXO.liste.length-1){ EXO.idx++; EXO.montre = false; EXO.juste = null; EXO.saisie = null; EXO.indicesVus = []; render(); window.scrollTo({top:0,behavior:"smooth"}); } else { quitterExercices(); } }
+function exoPrecedent(){ if(EXO.idx > 0){ EXO.idx--; EXO.montre = false; EXO.juste = null; EXO.saisie = null; EXO.indicesVus = []; render(); window.scrollTo({top:0,behavior:"smooth"}); } }
+function quitterExercices(){ EXO = null; vue.onglet = "chap"; render(); window.scrollTo({top:0,behavior:"smooth"}); }
+
+/* ---- QCM du niveau ---- */
+function vueQCM(){
+  const n = vue.niv;
+  const liste = qcmDeNiv(n);
+  const niv = NIVEAUX.find(x=>x.id===n);
+
+  if(!liste.length){
+    app.innerHTML = `<section class="sect">
+      <h2>QCM · ${niv.nom}</h2>
+      <p class="sub">Les QCM de ce niveau arrivent bientôt.</p>
+      <div class="card"><div class="empty">Aucun QCM n'est encore disponible pour ${niv.nom}.</div></div>
+    </section>`;
+    return;
+  }
+
+  const faits = liste.filter(q=>STATE.notes[q.id]);
+  const moy = faits.length ? Math.round(faits.reduce((s,q)=>s+STATE.notes[q.id].best,0)/faits.length) : 0;
+
+  app.innerHTML = `
+    <section class="sect">
+      <h2>QCM · ${niv.nom}</h2>
+      <p class="sub">Correction immédiate avec explication après chaque réponse. Ton meilleur score est conservé.</p>
+      <div class="grid cols3">
+        <div class="card"><div class="chip">QCM disponibles</div><div class="score" style="margin-top:10px">${liste.length}</div></div>
+        <div class="card"><div class="chip">Terminés</div><div class="score" style="margin-top:10px">${faits.length}<small>/${liste.length}</small></div></div>
+        <div class="card"><div class="chip">Score moyen</div><div class="score" style="margin-top:10px">${moy}<small> %</small></div></div>
+      </div>
+    </section>
+    <section class="sect">
+      <div class="grid cols2">
+        ${liste.map(q=>{
+          const r = STATE.notes[q.id];
+          return `<button class="lvl" onclick="ouvrirQCM('${q.id}')">
+            <span class="chip ${r?"ok":""}">${r ? "Meilleur : "+r.best+"%" : "Non commencé"}</span>
+            <h3>${q.titre}</h3>
+            <p>${q.questions.length} questions · ${nomNiveau(q.niveau)}</p>
+            <div class="row" style="margin-top:10px"><span class="chip">⏱ ~${q.questions.length} min</span></div>
+          </button>`;
+        }).join("")}
+      </div>
+    </section>`;
+}
+
+/* ---- Un QCM en cours / résultat ---- */
+function vueQuiz(){
+  const q = quiz.data;
+  const total = q.questions.length;
+
+  /* --- Écran de résultat --- */
+  if(quiz.idx >= total){
+    const pct = Math.round(quiz.score/total*100);
+    const prev = STATE.notes[q.id] || { best:0, last:0, attempts:0 };
+    const meilleur = Math.max(prev.best, pct);
+    STATE.notes[q.id] = { best: meilleur, last: pct, attempts:(prev.attempts||0)+1 };
+    save(STATE);
+
+    const mention = pct>=80 ? "Excellent" : pct>=60 ? "Bien joué" : pct>=40 ? "À consolider" : "À revoir";
+    const couleur = pct>=80 ? "var(--ok)" : pct>=60 ? "var(--brand2)" : pct>=40 ? "var(--amber)" : "var(--no)";
+
+    app.innerHTML = `
+      <section class="sect">
+        <button class="btn ghost" onclick="changerOnglet('qcm')">‹ QCM ${nomNiveau(q.niveau)}</button>
+        <h2 style="margin-top:16px;font-size:24px">${q.titre}</h2>
+        <p class="sub">Résultat du QCM</p>
+        <div class="card">
+          <div class="row" style="justify-content:space-between;align-items:flex-end">
+            <div>
+              <div class="score" style="color:${couleur}">${pct}<small> %</small></div>
+              <p style="margin:8px 0 0;color:var(--muted)">${quiz.score} bonnes réponses sur ${total} · ${mention}</p>
+            </div>
+            <span class="chip ${pct>=80?"ok":""}">Meilleur score : ${meilleur}%</span>
+          </div>
+          <div class="bar" style="margin-top:16px"><i style="width:${pct}%;background:${couleur}"></i></div>
+          <div class="recap">
+            ${q.questions.map((qq,i)=>{
+              const ok = quiz.histo[i];
+              return `<div class="line">
+                <span class="n" style="${ok?"background:var(--okbg);color:var(--ok)":"background:var(--nobg);color:var(--no)"}">${i+1}</span>
+                <div><b style="font-weight:600">${qq.q}</b>
+                <div style="color:var(--muted);margin-top:2px">${ok?"Bonne réponse":"À revoir"} — ${qq.options[qq.bonne]}</div></div>
+              </div>`;
+            }).join("")}
+          </div>
+          <div class="row" style="margin-top:18px">
+            <button class="btn primary" onclick="ouvrirQCM('${q.id}')">Refaire ce QCM</button>
+            <button class="btn ghost" onclick="changerOnglet('qcm')">Autres QCM</button>
+            <button class="btn ghost" onclick="changerOnglet('progres')">Ma progression</button>
+          </div>
+        </div>
+      </section>`;
+    return;
+  }
+
+  /* --- Question en cours --- */
+  const Q = q.questions[quiz.idx];
+  app.innerHTML = `
+    <section class="sect">
+      <button class="btn ghost" onclick="changerOnglet('qcm')">‹ QCM ${nomNiveau(q.niveau)}</button>
+      <h2 style="margin-top:16px;font-size:22px">${q.titre}</h2>
+      <div class="card" style="margin-top:16px">
+        <div class="qtop">
+          <span class="chip">Question ${quiz.idx+1} / ${total}</span>
+          <span class="prog">${quiz.score} bonne${quiz.score>1?"s":""} réponse${quiz.score>1?"s":""}</span>
+        </div>
+        <div class="bar" style="margin-top:12px"><i style="width:${Math.round(quiz.idx/total*100)}%"></i></div>
+        <div class="qtext">${Q.q}</div>
+        <div class="opts" id="opts">
+          ${Q.options.map((o,i)=>`
+            <button class="opt" onclick="repondre(${i})">
+              <span class="letter">${"ABCD"[i]}</span><span>${o}</span>
+            </button>`).join("")}
+        </div>
+        <div class="feedback" id="fb"></div>
+        <div class="row" style="margin-top:16px">
+          <button class="btn primary" id="btnNext" style="display:none" onclick="questionSuivante()">
+            ${quiz.idx+1<total ? "Question suivante ›" : "Voir mon résultat ›"}
+          </button>
+        </div>
+      </div>
+    </section>`;
+}
+
+function repondre(i){
+  if(quiz.repondu) return;
+  quiz.repondu = true;
+  const Q = quiz.data.questions[quiz.idx];
+  const ok = i === Q.bonne;
+  if(ok) quiz.score++;
+  quiz.histo[quiz.idx] = ok;
+
+  document.querySelectorAll("#opts .opt").forEach((b,idx)=>{
+    b.disabled = true;
+    if(idx === Q.bonne) b.classList.add("good");
+    else if(idx === i)  b.classList.add("bad");
+  });
+
+  const fb = document.getElementById("fb");
+  fb.className = "feedback show " + (ok?"good":"bad");
+  const expl = (typeof Q.explication === "string" && Q.explication.trim())
+    ? Q.explication : "Explication indisponible.";
+  fb.innerHTML = `<b>${ok?"✅ Correct":"❌ Incorrect"}</b>${expl}`;
+  document.getElementById("btnNext").style.display = "inline-flex";
+}
+
+function questionSuivante(){
+  quiz.idx++; quiz.repondu = false;
+  render(); window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* ---- Progression du niveau ---- */
+function vueProgres(){
+  const n = vue.niv;
+  const niv = NIVEAUX.find(x=>x.id===n);
+  const chaps = chapDeNiv(n), qcms = qcmDeNiv(n);
+  const vus = chaps.filter(c=>STATE.vus[c.id]).length;
+  const notes = qcms.map(q=>[q, STATE.notes[q.id]]).filter(([,v])=>v);
+  const moyenne = notes.length ? Math.round(notes.reduce((s,[,v])=>s+v.best,0)/notes.length) : 0;
+  const essais = notes.reduce((s,[,v])=>s+v.attempts,0);
+  const pct = chaps.length ? Math.round(vus/chaps.length*100) : 0;
+
+  app.innerHTML = `
+    <section class="sect">
+      <h2>Progression · ${niv.nom}</h2>
+      <p class="sub">Enregistrée sur cet appareil uniquement. Rien n'est envoyé nulle part.</p>
+      <div class="grid cols3">
+        <div class="card"><div class="chip">Chapitres consultés</div>
+          <div class="score" style="margin-top:10px">${vus}<small>/${chaps.length}</small></div>
+          <div class="bar" style="margin-top:12px"><i style="width:${pct}%"></i></div></div>
+        <div class="card"><div class="chip">Score moyen</div>
+          <div class="score" style="margin-top:10px">${moyenne}<small> %</small></div>
+          <p style="margin:8px 0 0;color:var(--muted);font-size:13px">sur tes meilleurs scores</p></div>
+        <div class="card"><div class="chip">QCM terminés</div>
+          <div class="score" style="margin-top:10px">${notes.length}<small>/${qcms.length}</small></div>
+          <p style="margin:8px 0 0;color:var(--muted);font-size:13px">${essais} tentative${essais>1?"s":""} au total</p></div>
+      </div>
+    </section>
+
+    <section class="sect">
+      <div class="card">
+        <h3 style="font-size:17px">Détail par QCM</h3>
+        ${notes.length ? notes.map(([q,v])=>`<div class="kv">
+            <span>${q.titre}</span>
+            <span><b>${v.best}%</b> <span style="color:var(--muted)">· dernier ${v.last}% · ${v.attempts} essai${v.attempts>1?"s":""}</span></span>
+          </div>`).join("") : `<div class="empty">Aucun QCM terminé à ce niveau pour l'instant.</div>`}
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h3 style="font-size:17px">Chapitres</h3>
+        ${chaps.length ? chaps.map(c=>`<div class="kv">
+            <span>${c.titre}</span>
+            <span class="chip ${STATE.vus[c.id]?"ok":"no"}">${STATE.vus[c.id]?"Consulté":"Non lu"}</span>
+          </div>`).join("") : `<div class="empty">Aucun chapitre à ce niveau.</div>`}
+      </div>
+
+      <div class="row" style="margin-top:18px">
+        <button class="btn ghost" onclick="resetNiveau('${n}')">Effacer ma progression · ${niv.nom}</button>
+        <button class="btn ghost" onclick="resetTout()">Tout effacer</button>
+      </div>
+    </section>`;
+}
+
+function resetNiveau(n){
+  if(!confirm("Effacer la progression de "+nomNiveau(n)+" sur cet appareil ?")) return;
+  chapDeNiv(n).forEach(c=>delete STATE.vus[c.id]);
+  qcmDeNiv(n).forEach(q=>delete STATE.notes[q.id]);
+  save(STATE); render();
+}
+function resetTout(){
+  if(!confirm("Effacer toute la progression, tous niveaux confondus ?")) return;
+  STATE.notes = {}; STATE.vus = {}; save(STATE); render();
+}
+
+/* ---------- CONFIG ---------- */
+// Vide = mode démonstration (aucun envoi réseau). À remplir avec l'URL /exec de ton Apps Script.
+let CLASSE_URL = "https://script.google.com/macros/s/AKfycby5bds9vl6P97OuoWCFvwwrE_h0nOfkfDXoaQ0b9sdr6QBGJ4vfsxykH4FxLT-GHto7/exec";   // ← COLLE ICI l'URL de ton Apps Script (voir consignes)
+
+
+/* ---------- RÉSEAU ---------- */
+// Apps Script ne renvoie pas d'en-têtes CORS sur une requête classique :
+// on passe en text/plain (requête "simple"), ce qui évite le preflight.
+async function api(action, params){
+  if(!CLASSE_URL) return { demo:true };
+  const corps = JSON.stringify(Object.assign({ action }, params || {}));
+  try{
+    const r = await fetch(CLASSE_URL, {
+      method:"POST",
+      headers:{ "Content-Type":"text/plain;charset=utf-8" },
+      body: corps
+    });
+    const t = await r.text();
+    try { return JSON.parse(t); } catch(e){ return { erreur:"réponse illisible", brut:t.slice(0,200) }; }
+  }catch(e){
+    return { erreur:"connexion impossible", detail:String(e).slice(0,160) };
+  }
+}
+function enModeDemo(){ return !CLASSE_URL; }
+
+/* ---------- ESPACE ÉLÈVE ----------
+   Ce fichier ne sait QUE rejoindre une salle.
+   Aucune fonction ne permet d'en créer une : le code de pilotage
+   n'est pas présent ici. */
+
+/* (état CLASSE défini plus haut dans ce fichier) */
+
+/* =========================================================
+   ÉCRAN ÉLÈVE — rejoindre une salle et répondre
+   ========================================================= */
+function vueEleve(){
+  if(!CLASSE.salle){
+    app.innerHTML = `
+      <section class="sect">
+        <h2>Rejoindre une classe</h2>
+        <p class="sub">Ton professeur projette un code à 4 lettres au tableau. Saisis-le ici.</p>
+        <div class="card" style="max-width:460px">
+          <div class="chip">Code de la salle</div>
+          <input id="codeEntree" class="saisie-code" maxlength="4" autocomplete="off"
+            placeholder="····" oninput="this.value=this.value.toUpperCase()"
+            onkeydown="if(event.key==='Enter') rejoindre()" style="margin-top:12px">
+          <div class="row" style="margin-top:16px">
+            <button class="btn primary" onclick="rejoindre()">Rejoindre</button>
+          </div>
+          <p style="color:var(--muted);font-size:13.5px;margin:16px 0 0">
+            Aucun nom, aucun compte, aucune donnée personnelle n'est demandé.
+            Seule ta réponse est transmise, sans identification.
+          </p>
+        </div>
+      </section>`;
+    setTimeout(()=>{ const el=document.getElementById("codeEntree"); if(el) el.focus(); }, 100);
+    return;
+  }
+
+  if(CLASSE.dejaRepondu){
+    const Q = CLASSE.question;
+    const ok = CLASSE.choix === Q.bonne;
+    const explication = (typeof Q.explication === "string" && Q.explication.trim())
+      ? Q.explication
+      : "Explication indisponible pour le moment.";
+    app.innerHTML = `
+      <section class="sect">
+        <div class="row" style="justify-content:space-between">
+          <span class="chip">Salle ${CLASSE.salle}</span>
+          <span class="direct"><span class="dot"></span>ENVOYÉ</span>
+        </div>
+        <h2 style="margin-top:14px;font-size:24px">${ok?"✅ Correct":"❌ Pas tout à fait"}</h2>
+        <div class="card" style="margin-top:14px">
+          <div class="qtext">${Q.q}</div>
+          <div class="opts">
+            ${Q.options.map((o,i)=>{
+              const cls = i===Q.bonne ? "good" : (i===CLASSE.choix ? "bad" : "");
+              return `<div class="opt ${cls}" style="cursor:default">
+                <span class="letter">${"ABCD"[i]}</span><span>${o}</span></div>`;
+            }).join("")}
+          </div>
+          <div class="feedback show ${ok?"good":"bad"}">
+            <b>${ok?"Bien joué":"Explication"}</b>${explication}
+          </div>
+          <p style="color:var(--muted);font-size:13.5px;margin:16px 0 0">
+            Reste sur cette page : la question suivante apparaîtra automatiquement.
+          </p>
+        </div>
+      </section>`;
+    return;
+  }
+
+  const Q = CLASSE.question;
+  app.innerHTML = `
+    <section class="sect">
+      <div class="row" style="justify-content:space-between">
+        <span class="chip">Salle ${CLASSE.salle}</span>
+        <span class="chip">Question posée par le prof</span>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="qtext" style="font-size:19px">${Q.q}</div>
+        <div class="opts">
+          ${Q.options.map((o,i)=>`
+            <button class="opt" onclick="repondreClasse(${i})">
+              <span class="letter">${"ABCD"[i]}</span><span>${o}</span>
+            </button>`).join("")}
+        </div>
+      </div>
+    </section>`;
+}
+
+async function rejoindre(){
+  const el = document.getElementById("codeEntree");
+  const code = (el.value||"").trim().toUpperCase();
+  if(code.length !== 4){ alert("Le code comporte 4 caractères."); return; }
+
+  if(enModeDemo()){
+    // Fichier élève : aucune salle ne peut être créée ici. On explique simplement.
+    alert("Aucune session ouverte pour ce code. Demande le bon code à ton professeur.");
+    return;
+  }
+
+  const r = await api("rejoindre", { code });
+  if(r && r.erreur){ alert("Impossible de rejoindre : " + r.erreur); return; }
+  if(!r || !r.question){ alert("Cette salle n'existe pas ou est fermée."); return; }
+  CLASSE.salle = code;
+  CLASSE.question = { q:r.question, options:r.options, bonne:r.bonne, explication:r.explication };
+  CLASSE.dejaRepondu = false;
+  render();
+}
+
+async function repondreClasse(i){
+  CLASSE.choix = i;
+  CLASSE.dejaRepondu = true;
+  CLASSE.rAttente = true;
+  render();
+
+  if(enModeDemo()){
+    CLASSE.question.bonne = 0;
+    CLASSE.question.explication = "Mode démonstration : aucune connexion configurée.";
+    CLASSE.rAttente = false;
+    render();
+    return;
+  }
+
+  // On récupère la bonne réponse et l'explication auprès du serveur,
+  // qui ne les délivre qu'après que l'élève a répondu.
+  const r = await api("repondre", { code:CLASSE.salle, eleve:CLASSE.eleveId, choix:i });
+  if(r && r.ok){
+    if(typeof r.bonne !== "undefined") CLASSE.question.bonne = Number(r.bonne);
+    if(r.explication) CLASSE.question.explication = r.explication;
+    CLASSE.erreurCorrection = null;
+  } else {
+    CLASSE.erreurCorrection = (r && r.erreur) ? r.erreur : "réponse du serveur illisible";
+  }
+  CLASSE.rAttente = false;
+  render();
+}
+
+function quitterSalle(){
+  CLASSE.salle = null; CLASSE.dejaRepondu = false; render();
+}
+
+/* (bloc réseau déjà défini plus haut) */
+
+/* ---------- GÉNÉRATION DE CODE ---------- */
+// Alphabet sans caractères ambigus (pas de O/0, I/1, S/5) : plus simple à dicter en classe.
+/* L'élève ne peut pas créer de salle : aucune génération de code ici. */
+
+/* ---------- ÉTAT LOCAL DU MODE CLASSE ---------- */
+let CLASSE = {
+  eleveId: localStorage.getItem("mathsly.eleveId") || null,
+  salle: null,          // code de la salle rejointe
+  question: null,       // question affichée
+  dejaRepondu: false,
+  choix: null,
+  resultats: null,      // résultats agrégés (prof)
+  derniereMaj: null
+};
+if(!CLASSE.eleveId){
+  CLASSE.eleveId = "E" + Math.random().toString(36).slice(2,8).toUpperCase();
+  localStorage.setItem("mathsly.eleveId", CLASSE.eleveId);
+}
+
+/* ---- Routeur (espace élève, contenu à la demande) ---- */
+function render(){
+  renderNiveaux();
+  renderSous();
+  const onglet = vue.onglet;
+  if(onglet==="cours" || onglet==="chap" || onglet==="qcm" || onglet==="quiz" || onglet==="progres" || onglet==="exo"){
+    chargerNiveau(vue.niv, function(){
+      if(vue.onglet==="cours")        vueCours();
+      else if(vue.onglet==="chap")    vueChapitre();
+      else if(vue.onglet==="qcm")     vueQCM();
+      else if(vue.onglet==="quiz")    vueQuiz();
+      else if(vue.onglet==="exo")     vueExercice();
+      else if(vue.onglet==="progres") vueProgres();
+    });
+  } else if(onglet==="class-join"){
+    vueEleve();
+  }
+  document.getElementById("userPill").textContent =
+    vue.onglet==="quiz" ? "QCM en cours" :
+    vue.onglet==="class-join" ? "Salle de classe" : nomNiveau(vue.niv);
+}
+
+/* ---- Démarrage ---- */
+(function demarrer(){
+  const dernier = STATE.dernierNiveau;
+  if(dernier && NIVEAUX.some(n=>n.id===dernier)) vue.niv = dernier;
+  const orig = changerNiveau;
+  window.changerNiveau = function(id){ STATE.dernierNiveau = id; save(STATE); orig(id); };
+  render();
+})();
+
+</script>
+</body>
+</html>
